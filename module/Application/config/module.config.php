@@ -15,7 +15,7 @@ return array(
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        'controller' => 'Vacation\Controller\Vacation', // modificato la route di default 'Application\Controller\Index'
                         'action'     => 'index',
                     ),
                 ),
