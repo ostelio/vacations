@@ -5,7 +5,7 @@ namespace Vacation\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * "Requests
+ * Requests
  *
  * @ORM\Table(name="requests", indexes={@ORM\Index(name="year_idx", columns={"year"}), @ORM\Index(name="month_idx", columns={"month"}), @ORM\Index(name="user_idx", columns={"user"})})
  * @ORM\Entity
@@ -22,9 +22,9 @@ class Requests
     private $idrequest;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="hours", type="integer", nullable=false)
+     * @ORM\Column(name="hours", type="float", precision=10, scale=0, nullable=false)
      */
     private $hours;
 
@@ -68,7 +68,8 @@ class Requests
      *
      * @ORM\Column(name="insertDate", type="datetime", nullable=false)
      */
-    private $insertdate;
+    private $insertdate = 'CURRENT_TIMESTAMP';
+
 
     /**
      * @param int $day
