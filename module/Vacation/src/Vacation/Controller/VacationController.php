@@ -3,11 +3,17 @@
 namespace Vacation\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Vacation\Entity\Requests;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Album\Model\VacationRequest;
+use Album\Form\VacationRequestForm;
 
 class VacationController extends AbstractActionController
 {
+    private $name = 'mvichi';
+    private $year = date("Y");
+
     /**
      * @var DoctrineORMEntityManager
      */
@@ -29,16 +35,13 @@ class VacationController extends AbstractActionController
         $TOT_VACATIONDAYS = 22;
         $TOT_ROLDAYS = 6.6;
 
-        $name = 'mvichi';
-        $year = date("Y");
-
         $totAnnualHours = $TOT_VACATIONSHOURS + $TOT_ROLHOURS;
         $totAnnualDays = $TOT_VACATIONDAYS + $TOT_ROLDAYS;
 
         $requestsModel = array();
-        $requestsModel['year'] = $year;
-        $requestsModel["goneVacationsHours"] = $this->getGoneVacations($name, $year);
-        $requestsModel["goneRolsHours"] = $this->getGoneRols($name, $year);
+        $requestsModel['year'] = $this->year;
+        $requestsModel["goneVacationsHours"] = $this->getGoneVacations($this->name, $this->year);
+        $requestsModel["goneRolsHours"] = $this->getGoneRols($this->name, $this->year);
 
         $requestsModel["goneVacationsDays"] = $requestsModel["goneVacationsHours"] / 8;
         $requestsModel["goneRolsDays"] = $requestsModel["goneRolsHours"] / 8;
@@ -54,6 +57,33 @@ class VacationController extends AbstractActionController
 
         // ma avere un oggetto che estende view model(invece di chiamare model quello che viene da db)? che cagata!
         return new ViewModel($requestsModel);
+    }
+
+    public function addAction()
+    {
+        $form = new VacationRequestForm();
+        $form->get('submit')->setValue('Add');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $vacationRequest = new VacationRequest();
+            $form->setInputFilter($vacationRequest->getInputFilter());
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+                $vacationRequest->exchangeArray($form->getData());
+                $requestsEntity = $this->toEntity($vacationRequest);
+                $requestsEntity->setYear($this->year);
+                $requestsEntity->setUser($this->name);
+
+                $em = $this->getEntityManager()->getManager();
+                $em->persist($requestsEntity);
+                $em->flush();
+
+                return $this->redirect()->toRoute('vacation');
+            }
+        }
+        return array('form' => $form);
     }
 
     private function getGoneVacations($name, $year)
@@ -81,6 +111,20 @@ class VacationController extends AbstractActionController
         ));
         $hours = $query->getSingleScalarResult();
         return (float)$hours;
+    }
+
+    /*
+     * @param @var Album\Model\VacationRequest
+     * @return @var Album\Model\VacationRequest
+     */
+    private function toEntity($obj)
+    {
+        $out = new Requests();
+        $out->setType($obj->getType());
+        $out->setHours($obj->getHours());
+        $out->setDay($obj->getDay());
+        $out->setMonth($obj->getMonth());
+        return $out;
     }
 
 }
