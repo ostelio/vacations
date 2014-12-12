@@ -11,8 +11,8 @@ use Album\Form\VacationRequestForm;
 
 class VacationController extends AbstractActionController
 {
-    private $name = 'mvichi';
-    private $year = date("Y");
+    private $name;
+    private $year;
 
     /**
      * @var DoctrineORMEntityManager
@@ -38,6 +38,9 @@ class VacationController extends AbstractActionController
         $totAnnualHours = $TOT_VACATIONSHOURS + $TOT_ROLHOURS;
         $totAnnualDays = $TOT_VACATIONDAYS + $TOT_ROLDAYS;
 
+        $this->name = 'mvichi';
+        $this->year = date("Y");
+
         $requestsModel = array();
         $requestsModel['year'] = $this->year;
         $requestsModel["goneVacationsHours"] = $this->getGoneVacations($this->name, $this->year);
@@ -61,6 +64,9 @@ class VacationController extends AbstractActionController
 
     public function addAction()
     {
+        $this->name = 'mvichi';
+        $this->year = date("Y");
+
         $form = new VacationRequestForm();
         $form->get('submit')->setValue('Add');
 

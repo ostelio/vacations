@@ -254,6 +254,10 @@ bt {
 }
 
 .icon-flag.logo-icon {
-    width: 90px;
-    height: 90px;
+    width: 35px;
+    height: 35px;
+}
+
+.icon-add {
+    padding-bottom: 30px;
 }
