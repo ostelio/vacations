@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityManager;
 use Vacation\Entity\Requests;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Album\Model\VacationRequest;
-use Album\Form\VacationRequestForm;
+use Vacation\Model\VacationRequest;
+use Vacation\Form\VacationRequestForm;
 
 class VacationController extends AbstractActionController
 {
@@ -82,7 +82,7 @@ class VacationController extends AbstractActionController
                 $requestsEntity->setYear($this->year);
                 $requestsEntity->setUser($this->name);
 
-                $em = $this->getEntityManager()->getManager();
+                $em = $this->getEntityManager();
                 $em->persist($requestsEntity);
                 $em->flush();
 

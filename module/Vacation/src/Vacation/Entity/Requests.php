@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="requests", indexes={@ORM\Index(name="year_idx", columns={"year"}), @ORM\Index(name="month_idx", columns={"month"}), @ORM\Index(name="user_idx", columns={"user"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Requests
 {
@@ -68,7 +69,7 @@ class Requests
      *
      * @ORM\Column(name="insertDate", type="datetime", nullable=false)
      */
-    private $insertdate = 'CURRENT_TIMESTAMP';
+    private $insertdate;
 
 
     /**
@@ -199,5 +200,14 @@ class Requests
         return $this->year;
     }
 
-
+    /**
+     *  @ORM\PrePersist
+     */
+    public function timestamp()
+    {
+        if(is_null($this->getInsertdate())) {
+            $this->setInsertdate(new \DateTime());
+        }
+        return $this;
+    }
 }
