@@ -31,6 +31,7 @@ class VacationController extends AbstractActionController
     {
         $TOT_VACATIONSHOURS = 176;
         $TOT_ROLHOURS = 53;
+        $TOT_DAYSPERMONTH = 2.38;
 
         $TOT_VACATIONDAYS = 22;
         $TOT_ROLDAYS = 6.6;
@@ -57,7 +58,7 @@ class VacationController extends AbstractActionController
         $requestsModel["totHoursResidual"] = $totAnnualHours - ($requestsModel["goneVacationsHours"] + $requestsModel["goneRolsHours"]);
         $requestsModel["totDaysResidual"] = $totAnnualDays - ($requestsModel["goneVacationsDays"] + $requestsModel["goneRolsDays"]);
 
-
+        $requestsModel["totDaysPerMonth"] = $TOT_DAYSPERMONTH;
         // ma avere un oggetto che estende view model(invece di chiamare model quello che viene da db)? che cagata!
         return new ViewModel($requestsModel);
     }

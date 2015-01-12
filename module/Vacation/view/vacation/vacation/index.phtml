@@ -1,26 +1,39 @@
-<div class="row">
-    <div class="col-lg-8 col-lg-offset-2 centered">
+<div id="ww">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 centered">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Anno <?php echo $year ?></h1>
+                    </div>
+                    <div class="col-md-12">
+                        (GG.x Mese <?php echo $totDaysPerMonth ?>)
+                    </div>
+                </div>
+            </div><!-- /col-lg-8 -->
+        </div><!-- /row -->
+    </div> <!-- /container -->
+</div>
+<div class="container pt">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 centered">
+            <div class="row">
+                <p>Ferie godute: <?php echo $goneVacationsHours ?> ore (<?php echo $goneVacationsDays ?> giorni)</p>
+                <p>Permessi goduti: <?php echo $goneRolsHours ?> ore (<?php echo $goneRolsDays ?> giorni)</p>
+                </br>
+                <p>Ferie mancanti: <?php echo $vacationResidualHours ?> ore (<?php echo $vacationResidualDays ?> giorni)</p>
+                <p>Permessi mancanti: <?php echo $rolResidualHours ?> ore (<?php echo $rolResidualDays ?> giorni)</p>
+                </br>
+                <p>Ore totali residue: <?php echo $totHoursResidual ?></p>
+                <p>Giorni totali residui: <?php echo $totDaysResidual ?></p>
+                </br>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="icon-add"><a href="/vacation/add"><img class="icon-flag logo-icon" src="/img/Create.png"></a></span>
+                </div>
+            </div>
+        </div><!-- /col-lg-8 -->
+    </div><!-- /row -->
+</div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Anno <?php echo $year ?></h1>
-            </div>
-        </div>
-        <div class="row">
-            <p>Ferie godute: <?php echo $goneVacationsHours ?> ore (<?php echo $goneVacationsDays ?> giorni)</p>
-            <p>Permessi goduti: <?php echo $goneRolsHours ?> ore (<?php echo $goneRolsDays ?> giorni)</p>
-            </br>
-            <p>Ferie mancanti: <?php echo $vacationResidualHours ?> ore (<?php echo $vacationResidualDays ?> giorni)</p>
-            <p>Permessi mancanti: <?php echo $rolResidualHours ?> ore (<?php echo $rolResidualDays ?> giorni)</p>
-            </br>
-            <p>Ore totali residue: <?php echo $totHoursResidual ?></p>
-            <p>Giorni totali residui: <?php echo $totDaysResidual ?></p>
-            </br>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <span class="icon-add"><a href="/vacation/add"><img class="icon-flag logo-icon" src="/img/Create.png"></a></span>
-            </div>
-        </div>
-    </div><!-- /col-lg-8 -->
-</div><!-- /row -->
