@@ -29,12 +29,13 @@ class VacationController extends AbstractActionController
 
     public function indexAction()
     {
+        $TOT_ROL_LAST_YEAR_HOURS = 5;
         $TOT_VACATIONSHOURS = 176;
-        $TOT_ROLHOURS = 53;
+        $TOT_ROLHOURS = 53+$TOT_ROL_LAST_YEAR_HOURS;
         $TOT_DAYSPERMONTH = 2.38;
 
         $TOT_VACATIONDAYS = 22;
-        $TOT_ROLDAYS = 6.6;
+        $TOT_ROLDAYS = $TOT_ROLHOURS / 8;
 
         $totAnnualHours = $TOT_VACATIONSHOURS + $TOT_ROLHOURS;
         $totAnnualDays = $TOT_VACATIONDAYS + $TOT_ROLDAYS;
