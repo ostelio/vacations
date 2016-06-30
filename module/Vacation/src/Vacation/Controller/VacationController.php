@@ -29,14 +29,31 @@ class VacationController extends AbstractActionController
 
     public function indexAction()
     {
+        /**
+         * questi sono i calcoli non aggiornati
+         */
+        // $TOT_SUPPRESSED_VACATIONS = 32;
+
+        //$TOT_ROL_LAST_YEAR_HOURS = 20;
+        //$TOT_VACATIONS_LAST_YEAR_HOURS = 8;
+
+        //$TOT_VACATIONSHOURS = 176 + $TOT_VACATIONS_LAST_YEAR_HOURS;
+        //$TOT_ROLHOURS = 76 + $TOT_SUPPRESSED_VACATIONS + $TOT_ROL_LAST_YEAR_HOURS;
+        //$TOT_DAYSPERMONTH = 2.58;
+
+        /**
+         * questo è il monte ore aggiornato correttamente
+         */
+        $TOT_DAYSPERMONTH = 2.58;
+
         $TOT_SUPPRESSED_VACATIONS = 32;
 
-        $TOT_ROL_LAST_YEAR_HOURS = 20;
-        $TOT_VACATIONS_LAST_YEAR_HOURS = 8;
+        $TOT_ROL_LAST_YEAR_HOURS = 82;
+        $TOT_VACATIONS_LAST_YEAR_HOURS = 0;
 
         $TOT_VACATIONSHOURS = 176 + $TOT_VACATIONS_LAST_YEAR_HOURS;
-        $TOT_ROLHOURS = 76 + $TOT_SUPPRESSED_VACATIONS + $TOT_ROL_LAST_YEAR_HOURS;
-        $TOT_DAYSPERMONTH = 2.38;
+        $TOT_ROLHOURS = 72 + $TOT_SUPPRESSED_VACATIONS + $TOT_ROL_LAST_YEAR_HOURS;
+
 
         $TOT_VACATIONDAYS = $TOT_VACATIONSHOURS / 8;
         $TOT_ROLDAYS = $TOT_ROLHOURS / 8;
