@@ -2,6 +2,7 @@
 
 namespace Vacation\Controller;
 
+use Zend;
 use Doctrine\ORM\EntityManager;
 use Vacation\Entity\Requests;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -9,51 +10,35 @@ use Zend\View\Model\ViewModel;
 use Vacation\Model\VacationRequest;
 use Vacation\Form\VacationRequestForm;
 
+
 class VacationController extends AbstractActionController
 {
     private $name;
     private $year;
+
+    private $settings;
+
+    private $VACATIONS_ANNUAL_AMOUNT;
+    private $ROL_ANNUAL_AMOUNT;
+    private $TOT_DAYSPERMONTH;
+    private $TOT_SUPPRESSED_VACATIONS;
+    //$TOT_ROL_LAST_YEAR_HOURS = 82;
+    private $TOT_ROL_LAST_YEAR_HOURS;
+    private $TOT_VACATIONS_LAST_YEAR_HOURS;
+
 
     /**
      * @var DoctrineORMEntityManager
      */
     private $em;
 
-    public function getEntityManager()
-    {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        }
-        return $this->em;
-    }
 
     public function indexAction()
     {
-        /**
-         * questi sono i calcoli non aggiornati
-         */
-        // $TOT_SUPPRESSED_VACATIONS = 32;
+        $this->loadSettings();
 
-        //$TOT_ROL_LAST_YEAR_HOURS = 20;
-        //$TOT_VACATIONS_LAST_YEAR_HOURS = 8;
-
-        //$TOT_VACATIONSHOURS = 176 + $TOT_VACATIONS_LAST_YEAR_HOURS;
-        //$TOT_ROLHOURS = 76 + $TOT_SUPPRESSED_VACATIONS + $TOT_ROL_LAST_YEAR_HOURS;
-        //$TOT_DAYSPERMONTH = 2.58;
-
-        /**
-         * questo è il monte ore aggiornato correttamente
-         */
-        $TOT_DAYSPERMONTH = 2.58;
-
-        $TOT_SUPPRESSED_VACATIONS = 32;
-
-        $TOT_ROL_LAST_YEAR_HOURS = 82;
-        $TOT_VACATIONS_LAST_YEAR_HOURS = 0;
-
-        $TOT_VACATIONSHOURS = 176 + $TOT_VACATIONS_LAST_YEAR_HOURS;
-        $TOT_ROLHOURS = 72 + $TOT_SUPPRESSED_VACATIONS + $TOT_ROL_LAST_YEAR_HOURS;
-
+        $TOT_VACATIONSHOURS = $this->VACATIONS_ANNUAL_AMOUNT + $this->TOT_VACATIONS_LAST_YEAR_HOURS;
+        $TOT_ROLHOURS = $this->ROL_ANNUAL_AMOUNT + $this->TOT_SUPPRESSED_VACATIONS + $this->TOT_ROL_LAST_YEAR_HOURS;
 
         $TOT_VACATIONDAYS = $TOT_VACATIONSHOURS / 8;
         $TOT_ROLDAYS = $TOT_ROLHOURS / 8;
@@ -63,6 +48,7 @@ class VacationController extends AbstractActionController
 
         $this->name = 'mvichi';
         $this->year = date("Y");
+
 
         $requestsModel = array();
         $requestsModel['year'] = $this->year;
@@ -80,8 +66,8 @@ class VacationController extends AbstractActionController
         $requestsModel["totHoursResidual"] = $totAnnualHours - ($requestsModel["goneVacationsHours"] + $requestsModel["goneRolsHours"]);
         $requestsModel["totDaysResidual"] = $totAnnualDays - ($requestsModel["goneVacationsDays"] + $requestsModel["goneRolsDays"]);
 
-        $requestsModel["totDaysPerMonth"] = $TOT_DAYSPERMONTH;
-        // ma avere un oggetto che estende view model(invece di chiamare model quello che viene da db)? che cagata!
+        $requestsModel["totDaysPerMonth"] = $this->TOT_DAYSPERMONTH;
+
         return new ViewModel($requestsModel);
     }
 
@@ -115,6 +101,7 @@ class VacationController extends AbstractActionController
         return array('form' => $form);
     }
 
+
     private function getGoneVacations($name, $year)
     {
         $em = $this->getEntityManager();
@@ -142,6 +129,14 @@ class VacationController extends AbstractActionController
         return (float)$hours;
     }
 
+    private function getEntityManager()
+    {
+        if (null === $this->em) {
+            $this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        }
+        return $this->em;
+    }
+
     /*
      * @param @var Album\Model\VacationRequest
      * @return @var Album\Model\VacationRequest
@@ -154,6 +149,20 @@ class VacationController extends AbstractActionController
         $out->setDay($obj->getDay());
         $out->setMonth($obj->getMonth());
         return $out;
+    }
+
+    private function loadSettings()
+    {
+        $config = $this->getServiceLocator()->get('config');
+        $this->settings = $config['vacationsconfig'];
+
+        $this->VACATIONS_ANNUAL_AMOUNT = $this->settings['VACATIONS_ANNUAL_AMOUNT'];
+        $this->ROL_ANNUAL_AMOUNT = $this->settings['ROL_ANNUAL_AMOUNT'];
+        $this->TOT_DAYSPERMONTH = $this->settings['TOT_DAYSPERMONTH'];
+        $this->TOT_SUPPRESSED_VACATIONS = $this->settings['TOT_SUPPRESSED_VACATIONS'];
+        //$TOT_ROL_LAST_YEAR_HOURS = 82;
+        $this->TOT_ROL_LAST_YEAR_HOURS = $this->settings['TOT_ROL_LAST_YEAR_HOURS'];
+        $this->TOT_VACATIONS_LAST_YEAR_HOURS = $this->settings['TOT_VACATIONS_LAST_YEAR_HOURS'];
     }
 
 }
