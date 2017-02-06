@@ -49,24 +49,27 @@ class VacationController extends AbstractActionController
         $this->name = 'mvichi';
         $this->year = date("Y");
 
-
         $requestsModel = array();
+
         $requestsModel['year'] = $this->year;
+
+        $requestsModel["totDaysPerMonth"] = $this->TOT_DAYSPERMONTH;
+
         $requestsModel["goneVacationsHours"] = $this->getGoneVacations($this->name, $this->year);
         $requestsModel["goneRolsHours"] = $this->getGoneRols($this->name, $this->year);
 
-        $requestsModel["goneVacationsDays"] = $requestsModel["goneVacationsHours"] / 8;
-        $requestsModel["goneRolsDays"] = $requestsModel["goneRolsHours"] / 8;
+        $requestsModel["goneVacationsDays"] = $this->toDecimal( $requestsModel["goneVacationsHours"] / 8 );
+        $requestsModel["goneRolsDays"] = $this->toDecimal( $requestsModel["goneRolsHours"] / 8 );
 
         $requestsModel["vacationResidualHours" ]= $TOT_VACATIONSHOURS - $requestsModel["goneVacationsHours"];
-        $requestsModel["vacationResidualDays"] = $TOT_VACATIONDAYS - $requestsModel["goneVacationsDays"];
         $requestsModel["rolResidualHours"] = $TOT_ROLHOURS - $requestsModel["goneRolsHours"];
-        $requestsModel["rolResidualDays"] = $TOT_ROLDAYS - $requestsModel["goneRolsDays"];
+
+        $requestsModel["vacationResidualDays"] = $this->toDecimal( $TOT_VACATIONDAYS - $requestsModel["goneVacationsDays"] );
+        $requestsModel["rolResidualDays"] = $this->toDecimal( $TOT_ROLDAYS - $requestsModel["goneRolsDays"] );
 
         $requestsModel["totHoursResidual"] = $totAnnualHours - ($requestsModel["goneVacationsHours"] + $requestsModel["goneRolsHours"]);
-        $requestsModel["totDaysResidual"] = $totAnnualDays - ($requestsModel["goneVacationsDays"] + $requestsModel["goneRolsDays"]);
+        $requestsModel["totDaysResidual"] = $this->toDecimal( $totAnnualDays - ($requestsModel["goneVacationsDays"] + $requestsModel["goneRolsDays"]) );
 
-        $requestsModel["totDaysPerMonth"] = $this->TOT_DAYSPERMONTH;
 
         return new ViewModel($requestsModel);
     }
@@ -112,7 +115,7 @@ class VacationController extends AbstractActionController
             'type' => 'vacation'
         ));
         $hours = $query->getSingleScalarResult();
-        return (float)$hours;
+        return $this->toDecimal($hours);
 
     }
 
@@ -126,7 +129,7 @@ class VacationController extends AbstractActionController
             'type' => 'paidLeave'
         ));
         $hours = $query->getSingleScalarResult();
-        return (float)$hours;
+        return $this->toDecimal($hours);
     }
 
     private function getEntityManager()
@@ -160,9 +163,13 @@ class VacationController extends AbstractActionController
         $this->ROL_ANNUAL_AMOUNT = $this->settings['ROL_ANNUAL_AMOUNT'];
         $this->TOT_DAYSPERMONTH = $this->settings['TOT_DAYSPERMONTH'];
         $this->TOT_SUPPRESSED_VACATIONS = $this->settings['TOT_SUPPRESSED_VACATIONS'];
-        //$TOT_ROL_LAST_YEAR_HOURS = 82;
         $this->TOT_ROL_LAST_YEAR_HOURS = $this->settings['TOT_ROL_LAST_YEAR_HOURS'];
         $this->TOT_VACATIONS_LAST_YEAR_HOURS = $this->settings['TOT_VACATIONS_LAST_YEAR_HOURS'];
+    }
+
+    private function toDecimal($number)
+    {
+        return number_format((float)$number, 2, '.', '');
     }
 
 }
