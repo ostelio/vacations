@@ -22,7 +22,6 @@ class VacationController extends AbstractActionController
     private $ROL_ANNUAL_AMOUNT;
     private $TOT_DAYSPERMONTH;
     private $TOT_SUPPRESSED_VACATIONS;
-    //$TOT_ROL_LAST_YEAR_HOURS = 82;
     private $TOT_ROL_LAST_YEAR_HOURS;
     private $TOT_VACATIONS_LAST_YEAR_HOURS;
 
